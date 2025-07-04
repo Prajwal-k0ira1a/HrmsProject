@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import Employee from "./models/employee.js";
+import departmentRoutes from './routes/departmentRoutes.js';
 import dotenv from "dotenv";
+import emp from "./routes/employeeRoutes.js"
 
 dotenv.config();
 
@@ -21,8 +22,13 @@ dbConnection.then(() => {
     process.exit(1);
 })
 
-import emp from "./routes/employeeRoutes.js"
 app.use("/api/employees", emp);
+app.use('/api/departments', departmentRoutes);
+app.use('/api/attendance', attendanceRoutes);
+app.use('/api/leaves', leaveRoutes);
+app.use('/api/payrolls', payrollRoutes);
+app.use('/api/performance', performanceRoutes);
+
 
 app.get("/", (req, res) => {
     res.send("Prajwal God");

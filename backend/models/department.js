@@ -4,17 +4,28 @@ const departmentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
         trim: true
     },
     description: {
         type: String,
-        required: true,
         trim: true
     },
-    manager: {
+    head: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee",
-        required: true
+        ref: 'User'
+    },
+    budget: {
+        type: Number,
+        min: 0
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

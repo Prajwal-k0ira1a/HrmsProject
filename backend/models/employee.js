@@ -1,70 +1,61 @@
-import { mongoose } from "mongoose";
+import mongoose from "mongoose";
+
 const employeeSchema = new mongoose.Schema({
-    employeeId: {
+    name: {
         type: String,
         required: true,
-        unique: true,
-        trim: true
-    },
-    firstName: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    lastName: {
-        type: String,
-        required: true,
-        trim: true
+        trim: true,
+        minlength: 2,
+        maxlength: 50
     },
     email: {
         type: String,
-        lowercase: true,
         required: true,
         unique: true,
-        trim: true,
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-    },
-    phone: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    department: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    position: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    hireDate: {
-        type: Date,
-        required: true
-    },
-    salary: {
-        type: Number,
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ["active", "inactive"],
-        required: true
-    },
-    manager: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee",
-        default: null
+        lowercase: true,
+        match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     },
     password: {
         type: String,
         required: true,
-        minlength: 8,
+        minlength: 6
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'manager', 'employee'],
+        default: 'employee'
+    },
+    department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department'
+    },
+    designation: {
+        type: String,
         trim: true
+    },
+    salary: {
+        type: Number,
+        min: 0
+    },
+    profileImage: {
+        type: String
+    },
+    phoneNumber: {
+        type: String,
+        match: /^\d{10,15}$/
+    },
+    address: {
+        type: String
+    },
+    dateOfJoining: {
+        type: Date,
+        default: Date.now
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
+}, { timestamps: true });
 
-
-});
 const Employee = mongoose.model('Employee', employeeSchema);
 export default Employee;
