@@ -41,6 +41,7 @@ export const getAttendanceById = async (req, res) => {
   try {
     const record = await Attendance.findById(req.params.id).populate('userId');
     if (!record) {
+      
       return res.status(404).json({ success: false, message: 'Record not found' });
     }
     res.json({ success: true, data: record });
