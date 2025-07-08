@@ -6,6 +6,11 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log(email);
+    console.log(password);
+
+
+
     const employee = await Employee.findOne({ email }).select("+password");
 
     if (!employee) {
