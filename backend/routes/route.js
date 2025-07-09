@@ -5,7 +5,7 @@ import leaveRoutes from "./leaveRoutes.js";
 import payrollRoutes from "./payrollRoutes.js";
 import performanceRoutes from "./performanceRouter.js";
 import authRoutes from "./authRoutes.js";
-import author from "../middleware/auth.js";
+import author from "../middleware/authMiddleware.js";
 import departmentRoutes from "./departmentRoutes.js";
 
 const router=express.Router();

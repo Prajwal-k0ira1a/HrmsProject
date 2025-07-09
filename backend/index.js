@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 // import payrollRoutes from "./routes/payrollRoutes.js";
 // import performanceRoutes from "./routes/performanceRouter.js";
 // import authRoutes from"./routes/authRoutes.js"
-import author from "./middleware/auth.js"
+import author from "./middleware/authMiddleware.js"
 import routes from "./routes/route.js"
 dotenv.config();
 

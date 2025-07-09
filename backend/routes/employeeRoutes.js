@@ -1,10 +1,10 @@
 import express from 'express';
 import { createEmployee, deleteEmployee, getEmployee, getEmployeeById, updateEmployee } from "../controllers/employeeController.js";
-
+import authenticateToken from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // Create employee
-router.post("/", createEmployee);
+router.post("/", authenticateToken,createEmployee);
 
 // Get all employees (populate department and manager)
 router.get('/', (req, res, next) => getEmployee(req, res, next, { populate: ['department', 'manager'] }));
