@@ -8,14 +8,16 @@ import dotenv from "dotenv";
 // import payrollRoutes from "./routes/payrollRoutes.js";
 // import performanceRoutes from "./routes/performanceRouter.js";
 // import authRoutes from"./routes/authRoutes.js"
-import author from "./middleware/authMiddleware.js"
+
 import routes from "./routes/route.js"
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 const MongoDb_Url = process.env.MONGODB_URL;
 const dbConnection = mongoose.connect(MongoDb_Url);

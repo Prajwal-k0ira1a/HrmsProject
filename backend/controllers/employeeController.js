@@ -92,7 +92,7 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-// Update employee (excluding password)
+// Update employee (including role changes for admins)
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
