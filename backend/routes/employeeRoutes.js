@@ -4,7 +4,7 @@ import { authenticateToken, checkRole } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // Create employee (only admin can create)
-router.post("/create", [authenticateToken, checkRole(['admin'])], createEmployee);
+router.post("/create", [authenticateToken, checkRole('admin','manager')], createEmployee);
 
 // Get all employees (any authenticated user can view)
 router.get('/', authenticateToken, (req, res, next) => getEmployee(req, res, next, { populate: ['department', 'manager'] }));
@@ -13,9 +13,9 @@ router.get('/', authenticateToken, (req, res, next) => getEmployee(req, res, nex
 router.get("/:id", authenticateToken, (req, res, next) => getEmployeeById(req, res, next, { populate: ['department', 'manager'] }));
 
 // Delete employee (only admin can delete)
-router.delete("/:id", [checkRole(['admin']), authenticateToken], deleteEmployee);
+router.delete("/:id", [authenticateToken, checkRole('admin','manager')], deleteEmployee);
 
 // Update employee (only admin can update)
-router.put("/:id", [checkRole(['admin']), authenticateToken], updateEmployee);
+router.put("/:id", [authenticateToken, checkRole('admin','manager')], updateEmployee);
 
 export default router;

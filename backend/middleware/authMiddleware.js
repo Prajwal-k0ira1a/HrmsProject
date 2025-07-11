@@ -1,93 +1,56 @@
 import jwt from "jsonwebtoken";
 import Employee from "../models/employee.js";
 
-// Role-based authorization middleware
-function checkRole(roles) {
+const SECRET = "a-string-secret";
+
+// Helper function to decode token and get employee
+const getEmployeeFromToken = async (token) => {
+  const decoded = jwt.verify(token, SECRET);
+  if (!decoded.id) throw new Error("Token missing ID");
+
+  const employee = await Employee.findOne({ _id: decoded.id }).select("-password");
+  if (!employee) throw new Error("Employee not found");
+
+  return employee;
+};
+
+// Role-based middleware
+function checkRole(...roles) {
   return async (req, res, next) => {
     try {
       const token = req.cookies?.token;
-      if (!token) {
-        return res.status(401).json({ error: "Access denied. No token found in cookies." });
-      }
+      if (!token) return res.status(401).json({ error: "No token in cookies" });
 
-      const decoded = jwt.verify(token, "a-string-secret");
-      // Wrap the ID in an object for findOne()
-      const employee = await Employee.findOne({ _id: decoded.id }).select("-password");
+      const employee = await getEmployeeFromToken(token);
 
-      if (!employee) {
-        return res.status(403).json({ error: "Employee not found or token invalid." });
-      }
-
-      // Check if user has required role
       if (!roles.includes(employee.role)) {
-        res.status(403);
-        throw new Error(`User role '${employee.role}' not authorized`);
+        return res.status(403).json({ error: `Role '${employee.role}' not authorized` });
       }
 
       req.employee = employee;
       next();
     } catch (err) {
-      console.error("Auth error:", err);
-      console.log(err.message);
-      res.status(401).json({ error: "Authentication failed." });
+      console.error("checkRole error:", err);
+      res.status(401).json({ error: err.message });
     }
   };
 }
 
-// Default authentication without role check
+// Basic authentication
 async function authenticateToken(req, res, next) {
   try {
-    console.log('Received token:', req.cookies?.token);
-    
     const token = req.cookies?.token;
-    if (!token) {
-      return res.status(401).json({ 
-        error: "Access denied. No token found in cookies.",
-        details: "No token in cookies"
-      });
-    }
+    if (!token) return res.status(401).json({ error: "No token in cookies" });
 
-    try {
-      const decoded = jwt.verify(token, "a-string-secret");
-      console.log('Decoded token:', decoded);
-      
-      if (!decoded.id) {
-        return res.status(401).json({ 
-          error: "Invalid token format.",
-          details: "Token missing ID"
-        });
-      }
+    const employee = await getEmployeeFromToken(token);
 
-      // Wrap the ID in an object for findOne()
-      const employee = await Employee.findOne({ _id: decoded.id }).select("-password");
-      console.log('Found employee:', employee);
-
-      if (!employee) {
-        return res.status(403).json({ 
-          error: "Employee not found or token invalid.",
-          details: `No employee found with ID: ${decoded.id}`
-        });
-      }
-
-      req.employee = employee;
-      next();
-    } catch (jwtError) {
-      console.error("JWT verification error:", jwtError);
-      return res.status(401).json({ 
-        error: "Invalid JWT token.",
-        details: jwtError.message
-      });
-    }
+    req.employee = employee;
+    next();
   } catch (err) {
-    console.error("Auth error:", err);
-    return res.status(500).json({ 
-      error: "Internal server error.",
-      details: err.message
-    });
+    console.error("authenticateToken error:", err);
+    res.status(401).json({ error: err.message });
   }
 }
 
 export { authenticateToken, checkRole };
-
-
 export default authenticateToken;
