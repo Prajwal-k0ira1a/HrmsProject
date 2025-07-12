@@ -9,6 +9,8 @@ router.post("/create", [authenticateToken, checkRole('admin','manager')], create
 // Get all employees (any authenticated user can view)
 router.get('/', authenticateToken, (req, res, next) => getEmployee(req, res, next, { populate: ['department', 'manager'] }));
 
+// router.get('/', [authenticateToken,checkRole('admin','manager')], getEmployee);
+
 // Get employee by ID (any authenticated user can view)
 router.get("/:id", authenticateToken, (req, res, next) => getEmployeeById(req, res, next, { populate: ['department', 'manager'] }));
 
@@ -18,4 +20,4 @@ router.delete("/:id", [authenticateToken, checkRole('admin','manager')], deleteE
 // Update employee (only admin can update)
 router.put("/:id", [authenticateToken, checkRole('admin','manager')], updateEmployee);
 
-export default router;
+export default router

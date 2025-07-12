@@ -1,12 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import departmentRoutes from './routes/departmentRoutes.js';
-import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
-
 import routes from "./routes/route.js"
 import cookieParser from "cookie-parser";
 import Employee from "./models/employee.js";
+import dbConnect from "./database/db.js";
+import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();
@@ -15,17 +16,18 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 
-const MongoDb_Url = process.env.MONGODB_URL;
-const dbConnection = mongoose.connect(MongoDb_Url);
+const dbConnection=dbConnect();
+
 
 app.use("/api",routes);
-dbConnection.then(() => {
-    console.log("Connected");
 
-}).catch((error) => {
-    console.error("Error connecting to server:", error);
-    process.exit(1);
-})
+// dbConnection.then(() => {
+//     console.log("Connected");
+
+// }).catch((error) => {
+//     console.error("Error connecting to server:", error);
+//     process.exit(1);
+// })
 
 
 app.get("/", (req, res) => {
@@ -33,11 +35,40 @@ app.get("/", (req, res) => {
 })
 
 
+// dbConnect()
+//   .then(() => {
+//     app.listen(port, () => {
+//       console.log(` Server running at http://localhost:${port}`);
+//     });
+//   })
+//   .catch((error) => {
+//     console.error(" Server startup failed due to DB error:", error);
+//     process.exit(1);
+//   });
+dbConnect()
+  .then(() => {
+    console.log(`
+╔═════════════════════════════════════════════════════════════════════╗
+║                         DATABASE CONNECTION: SUCCESS                ║
+║                 MongoDB is connected and ready for queries          ║
+╠═════════════════════════════════════════════════════════════════════╣
+║                 SERVER RUNNING AT: http://localhost:${port}            ║
+╚═════════════════════════════════════════════════════════════════════╝
+    `);
+  })
+  .catch((error) => {
+    console.error(`
+╔═════════════════════════════════════════════════════════════════════╗
+║                         DATABASE CONNECTION: FAILED                 ║
+║                  Error occurred while connecting to MongoDB         ║
+╠═════════════════════════════════════════════════════════════════════╣
+${error}
 
-app.listen(port, () => {
-    console.log("Example listening at ",
-        `http://localhost:${port}`);
-})
+
+╚═════════════════════════════════════════════════════════════════════╝
+    `);
+    process.exit(1);
+  });
 
 // const seedAdmin=async ()=>{
 //     try{
