@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import departmentRoutes from './routes/departmentRoutes.js';
 import bcrypt from "bcryptjs";
-import routes from "./routes/route.js"
+import routes from "./routes/route.js";
 import cookieParser from "cookie-parser";
 import Employee from "./models/employee.js";
 import dbConnect from "./database/db.js";
@@ -11,50 +11,27 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT_NUM;
 
 app.use(express.json());
 app.use(cookieParser());
 
-const dbConnection=dbConnect();
-
-
-app.use("/api",routes);
-
-// dbConnection.then(() => {
-//     console.log("Connected");
-
-// }).catch((error) => {
-//     console.error("Error connecting to server:", error);
-//     process.exit(1);
-// })
-
-
-app.get("/", (req, res) => {
-    res.send("Prajwal God");
-})
-
-
-// dbConnect()
-//   .then(() => {
-//     app.listen(port, () => {
-//       console.log(` Server running at http://localhost:${port}`);
-//     });
-//   })
-//   .catch((error) => {
-//     console.error(" Server startup failed due to DB error:", error);
-//     process.exit(1);
-//   });
+// Connect to the database
 dbConnect()
   .then(() => {
     console.log(`
-╔═════════════════════════════════════════════════════════════════════╗
-║                         DATABASE CONNECTION: SUCCESS                ║
-║                 MongoDB is connected and ready for queries          ║
-╠═════════════════════════════════════════════════════════════════════╣
-║                 SERVER RUNNING AT: http://localhost:${port}            ║
-╚═════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════╗
+║                         DATABASE CONNECTION: SUCCESS             ║
+║                 MongoDB is connected and ready for queries       ║
+╠══════════════════════════════════════════════════════════════════╣
+║                 SERVER RUNNING AT: http://localhost:${port}      ║
+╚══════════════════════════════════════════════════════════════════╝
     `);
+
+    // Start the server after successful DB connection
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
   })
   .catch((error) => {
     console.error(`
@@ -63,13 +40,17 @@ dbConnect()
 ║                  Error occurred while connecting to MongoDB         ║
 ╠═════════════════════════════════════════════════════════════════════╣
 ${error}
-
-
 ╚═════════════════════════════════════════════════════════════════════╝
     `);
     process.exit(1);
   });
 
+// Set up routes
+app.use("/api", routes);
+
+app.get("/", (req, res) => {
+  res.send("Prajwal God");
+});
 // const seedAdmin=async ()=>{
 //     try{
 //         const admin =await Employee.findOne({email:"admin@gmail.com"});
