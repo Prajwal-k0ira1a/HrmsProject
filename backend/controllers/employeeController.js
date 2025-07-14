@@ -3,26 +3,42 @@ import bcrypt from 'bcryptjs';
 
 // Create new employee
 const createEmployee = async (req, res) => {
-  try {
-    const { password, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const employee = new Employee({ ...rest, password: hashedPassword });
+    try {
+        const { password, ...otherFields } = req.body;
 
-    const savedEmployee = await employee.save();
-    res.status(201).json({
-      success: true,
-      message: "Employee created successfully",
-      data: savedEmployee
-    });
-  } catch (error) {
-    console.error("Error creating employee:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error creating employee",
-      error: error.message
-    });
-  }
+        if (!password) {
+            return res.status(400).json({
+                success: false,
+                message: "Password is required",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const employee = new Employee({
+            ...otherFields,
+            password: hashedPassword,
+            profileImage: req.file?.filename, // save uploaded image filename
+        });
+
+        const savedEmployee = await employee.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Employee created successfully",
+            data: savedEmployee,
+        });
+    } catch (error) {
+        console.error("Error creating employee:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error creating employee",
+            error: error.message,
+        });
+    }
 };
+
+
 
 // Get all employees
 const getEmployee = async (req, res) => {

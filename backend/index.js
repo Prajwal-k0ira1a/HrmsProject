@@ -12,9 +12,9 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT_NUM;
-
 app.use(express.json());
 app.use(cookieParser());
+app.use("/uploads",express.static("uploads/"))
 
 // Connect to the database
 dbConnect()

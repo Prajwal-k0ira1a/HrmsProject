@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const employeeSchema = new mongoose.Schema({
+    profileImage: {
+        type: String,
+        default: ''
+    },
     name: {
         type: String,
         required: true,
