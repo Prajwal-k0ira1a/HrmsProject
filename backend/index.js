@@ -24,7 +24,7 @@ dbConnect()
 ║                         DATABASE CONNECTION: SUCCESS             ║
 ║                 MongoDB is connected and ready for queries       ║
 ╠══════════════════════════════════════════════════════════════════╣
-║                 SERVER RUNNING AT: http://localhost:${port}      ║
+║                 SERVER RUNNING AT: http://localhost:${port}         ║
 ╚══════════════════════════════════════════════════════════════════╝
     `);
 
@@ -39,7 +39,7 @@ dbConnect()
 ║                         DATABASE CONNECTION: FAILED                 ║
 ║                  Error occurred while connecting to MongoDB         ║
 ╠═════════════════════════════════════════════════════════════════════╣
-${error}
+${error}                                                              ║
 ╚═════════════════════════════════════════════════════════════════════╝
     `);
     process.exit(1);
