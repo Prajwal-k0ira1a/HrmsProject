@@ -17,9 +17,9 @@ const sendEmail = async (email, subject, text) => {
             port: 587,
             secure: false,
             auth: {
-                // user: "np05cp4a240012@iic.edu.np",
+                
                 user: process.env.MAIL_USER,
-                // pass: "smnf rheg hure xfqt"
+                
                 pass: process.env.MAIL_PASS
             }
         })
