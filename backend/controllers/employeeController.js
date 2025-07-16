@@ -1,6 +1,6 @@
 import Employee from '../models/employee.js';
 import bcrypt from 'bcryptjs';
-
+import  sendEmail  from '../utils/sendEmail.js';
 // Create new employee
 const createEmployee = async (req, res) => {
     try {
@@ -20,8 +20,22 @@ const createEmployee = async (req, res) => {
             password: hashedPassword,
             profileImage: req.file?.filename, // save uploaded image filename
         });
-
         const savedEmployee = await employee.save();
+
+      sendEmail(
+            employee.email,
+            'Welcome to Our Company',
+            `Hello ${employee.name},
+            Welcome to our company! We are glad to have you on board.
+            Your login credentials are as follows:
+            Email: ${employee.email}
+            Password: ${req.body.password}
+            
+            Please make sure to change your password after logging in for the first time.
+            
+            Thank you,
+            Admin`
+        );
 
         res.status(201).json({
             success: true,
@@ -37,8 +51,6 @@ const createEmployee = async (req, res) => {
         });
     }
 };
-
-
 
 // Get all employees
 const getEmployee = async (req, res) => {

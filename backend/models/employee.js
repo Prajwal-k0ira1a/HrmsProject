@@ -41,9 +41,7 @@ const employeeSchema = new mongoose.Schema({
         type: Number,
         min: 0
     },
-    profileImage: {
-        type: String
-    },
+
     phoneNumber: {
         type: String,
         match: /^\d{10,15}$/
