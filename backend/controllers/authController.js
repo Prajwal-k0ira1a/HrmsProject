@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import Employee from "../models/employee.js";
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const login = async (req, res) => {
   try {

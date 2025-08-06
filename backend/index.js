@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import Employee from "./models/employee.js";
 import dbConnect from "./database/db.js";
 import dotenv from "dotenv";
+import cors from "cors"
 
 dotenv.config();
 
@@ -16,7 +17,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads",express.static("uploads/"))
 
+
 // Connect to the database
+app.use(cors({
+  origin:'http://localhost:5173',
+  credentials:true
+}))
+
 dbConnect()
   .then(() => {
     console.log(`
