@@ -38,6 +38,7 @@ const login = async (req, res) => {
       status: true,
       message: "Login success",
       data: {
+        employee,
         token,
       },
     });
