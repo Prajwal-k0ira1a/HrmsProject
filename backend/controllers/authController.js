@@ -1,15 +1,13 @@
 import jwt from "jsonwebtoken";
 import Employee from "../models/employee.js";
 import bcrypt from "bcryptjs";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email);
-    console.log(password);
     const employee = await Employee.findOne({ email }).select("+password");
     if (!employee) {
       return res.status(400).json({
@@ -50,4 +48,52 @@ const login = async (req, res) => {
     });
   }
 };
+
+const register = async (req, res) => {
+  try {
+    const { name, email, password, ...otherFields } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        status: false,
+        message: "Name, email, and password are required",
+      });
+    }
+    const existing = await Employee.findOne({ email });
+    if (existing) {
+      return res.status(400).json({
+        status: false,
+        message: "Email already registered",
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const employee = new Employee({
+      name,
+      email,
+      password: hashedPassword,
+      ...otherFields,
+    });
+    await employee.save();
+    return res.status(201).json({
+      status: true,
+      message: "Registration successful",
+      data: {
+        employee: {
+          _id: employee._id,
+          name: employee.name,
+          email: employee.email,
+          role: employee.role,
+          department: employee.department,
+        },
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Registration failed",
+      error: error.message,
+    });
+  }
+};
+
+export { login, register };
 export default login;
