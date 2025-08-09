@@ -55,7 +55,7 @@ const createEmployee = async (req, res) => {
 // Get all employees
 const getEmployee = async (req, res) => {
   try {
-    const employees = await Employee.find().populate('department');
+    const employees = await Employee.find();
     res.status(200).json({
       success: true,
       message: "Employees retrieved successfully",
@@ -74,7 +74,7 @@ const getEmployee = async (req, res) => {
 const getEmployeeById = async (req, res) => {
   const { id } = req.params;
   try {
-    const employee = await Employee.findById(id).populate('department');
+    const employee = await Employee.findById(id);
     if (!employee) {
       return res.status(404).json({
         success: false,

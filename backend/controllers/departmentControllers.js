@@ -22,7 +22,7 @@ const createDepartment = async (req, res) => {
 // Get all departments
 const getDepartments = async (req, res) => {
     try {
-        const departments = await Department.find().populate('manager');
+        const departments = await Department.find();
         res.status(200).json({
             success: true,
             message: "Departments retrieved successfully",
@@ -41,7 +41,7 @@ const getDepartments = async (req, res) => {
 const getDepartmentById = async (req, res) => {
     try {
         const { id } = req.params;
-        const department = await Department.findById(id).populate('manager');
+        const department = await Department.findById(id);
         if (!department) {
             return res.status(404).json({
                 success: false,

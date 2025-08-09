@@ -24,7 +24,7 @@ export const loginRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: true,
-    handler: (req, res, next, options) => {
+  handler: (req, res, next, options) => {
     res.status(options.statusCode).json({
       success: false,
       message: "Too many failed login attempts. Please try again after 3 hours.",
@@ -85,4 +85,3 @@ async function authenticateToken(req, res, next) {
 }
 
 export { authenticateToken, checkRole };
-export default authenticateToken;

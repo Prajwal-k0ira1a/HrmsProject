@@ -29,6 +29,8 @@ const login = async (req, res) => {
     );
     res.cookie("token", token, {
       httpOnly: true,
+      secure: false,      // set true in production (HTTPS)
+      sameSite: "lax",    // 'none' if cross-domain
       expires: new Date(Date.now() + 3600000),
       secure: process.env.NODE_ENV === "production",
     });
@@ -96,4 +98,3 @@ const register = async (req, res) => {
 };
 
 export { login, register };
-export default login;

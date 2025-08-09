@@ -3,9 +3,9 @@ import { getDepartmentById,createDepartment,updateDepartment,deleteDepartment, g
 
 const router=express.Router();
 
-router.get('/',getDepartments);
+router.get('/get',getDepartments);
 
-router.post("/",createDepartment);
+router.post("/create",createDepartment);
 
 router.put("/:id",updateDepartment);
 router.get("/:id",getDepartmentById);
