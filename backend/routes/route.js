@@ -8,11 +8,11 @@ import authRoutes from "./authRoutes.js";
 
 import departmentRoutes from "./departmentRoutes.js";
 
-const router=express.Router();
+const router = express.Router();
 
-router.use("/employees",employeeRoutes);
-router.use("/auth",authRoutes);
-router.use("/department",departmentRoutes);
+router.use("/employees", employeeRoutes);
+router.use("/auth", authRoutes);
+router.use("/department", departmentRoutes);
 router.use('/attendance', attendanceRoutes);
 router.use('/leaves', leaveRoutes);
 router.use('/payrolls', payrollRoutes);
