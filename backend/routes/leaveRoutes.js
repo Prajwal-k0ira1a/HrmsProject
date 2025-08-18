@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post('/', applyLeave); // Apply for leave
-router.get('/', getLeaves);   // View all leave requests
+router.post('/apply', applyLeave); // Apply for leave
+router.get('/get', getLeaves);   // View all leave requests
 router.get('/:id', getLeaveById); // View leave by ID
 router.put('/:id', updateLeaveStatus); // Approve or reject
 router.delete('/:id', deleteLeave); // Delete leave request
