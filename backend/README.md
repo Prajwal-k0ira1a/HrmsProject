@@ -20,3 +20,6 @@ Authorization: Bearer <your_jwt_token>
 - Admin/Manager: Full access
 - User: Limited by role
 - Rate Limiting: Applied to login & sensitive routes
+
+
+Dipen Coding going on
